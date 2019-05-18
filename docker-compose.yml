@@ -10,9 +10,9 @@ services:
       GITLAB_OMNIBUS_CONFIG: |
        external_url 'http://gitlab.ekwing.com'
     volumes:
-      - './gitlab/config:/etc/gitlab'
-      - './gitlab/logs:/var/log/gitlab'
-      - './gitlab/data:/var/opt/gitlab'
+      - ./gitlab/config:/etc/gitlab
+      - ./gitlab/logs:/var/log/gitlab
+      - ./gitlab/data:/var/opt/gitlab
 
   jenkins:
     image: jenkinsci/blueocean
@@ -27,7 +27,7 @@ services:
     restart: always
     user: root
     volumes:
-      - ./verdaccio:$HOME/.config/verdaccio
+      - ./verdaccio:/root/.config/verdaccio
 
   nginx:
     image: nginx
