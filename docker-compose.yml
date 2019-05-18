@@ -4,7 +4,9 @@ services:
   jenkins:
     image: jenkinsci/blueocean
     restart: always
+    user: root
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - $HOME/jenkins:/var/jenkins_home
 
   nginx:
