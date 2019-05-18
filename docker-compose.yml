@@ -7,7 +7,14 @@ services:
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - $HOME/jenkins:/var/jenkins_home
+      - ./jenkins:/var/jenkins_home
+
+  verdaccio:
+    image: verdaccio/verdaccio
+    restart: always
+    user: root
+    volumes:
+      - ./verdaccio:~/.config/verdaccio
 
   nginx:
     image: nginx
@@ -28,4 +35,4 @@ services:
     ports:
       - 53:53/udp
     volumes:
-      - './dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf'
+      - ./dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf
