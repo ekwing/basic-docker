@@ -7,19 +7,20 @@ services:
     restart: always
     user: root
     ports:
-      - 22:22
+      - 4022:22
     environment:
       TZ: "Asia/Shanghai"
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'http://gitlab.ekwing.com'
         pages_external_url 'http://gitlab.ekwing.io/'
-        unicorn['worker_processes'] = 2
+        unicorn['worker_processes'] = 3
         gitlab_pages['enable'] = true
         gitlab_rails['backup_keep_time'] = 604800
         gitlab_rails['gitlab_email_enabled'] = true
         gitlab_rails['gitlab_email_from'] = 'ekwing@moyi365.com'
         gitlab_rails['gitlab_email_display_name'] = 'Gitlab Admin'
         gitlab_rails['gitlab_email_reply_to'] = 'ekwing@moyi365.com'
+        gitlab_rails['gitlab_shell_ssh_port'] = 4022
         gitlab_rails['lfs_enabled'] = true
         gitlab_rails['lfs_storage_path'] = '/var/opt/gitlab/gitlab-rails/shared/lfs-objects'
         gitlab_rails['smtp_enable'] = true
