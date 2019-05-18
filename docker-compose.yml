@@ -1,6 +1,19 @@
 version: "3"
 
 services:
+  gitlab:
+    image: gitlab/gitlab-ce
+    restart: always
+    ports:
+      - 22:22
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+       external_url 'http://gitlab.ekwing.com'
+    volumes:
+      - './gitlab/config:/etc/gitlab'
+      - './gitlab/logs:/var/log/gitlab'
+      - './gitlab/data:/var/opt/gitlab'
+
   jenkins:
     image: jenkinsci/blueocean
     restart: always
@@ -24,7 +37,9 @@ services:
       - 80:80
       - 443:443
     depends_on:
+      - gitlab
       - jenkins
+      - verdaccio
     volumes:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf.d:/etc/nginx/conf.d
