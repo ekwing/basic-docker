@@ -1,6 +1,7 @@
 nginx/logs/
 jenkins/
 gitlab/
+gitlab-runner/
 verdaccio/conf/htpasswd
 verdaccio/plugins
 verdaccio/storage
