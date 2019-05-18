@@ -5,7 +5,7 @@ services:
     image: jenkinsci/blueocean
     restart: always
     volumes:
-      - ./jenkins:/var/jenkins_home
+      - $HOME/jenkins:/var/jenkins_home
 
   nginx:
     image: nginx
