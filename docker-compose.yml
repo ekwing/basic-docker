@@ -8,7 +8,7 @@ services:
     ports:
       - 22:22
     environment:
-      TZ: 'Asia/Shanghai'
+      TZ: "Asia/Shanghai"
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'http://gitlab.ekwing.com'
         pages_external_url 'http://gitlab.ekwing.io/'
@@ -25,7 +25,7 @@ services:
         gitlab_rails['smtp_address'] = 'smtp.exmail.qq.com'
         gitlab_rails['smtp_port'] = 465
         gitlab_rails['smtp_user_name'] = 'ekwing@moyi365.com'
-        gitlab_rails['smtp_password'] = '
+        gitlab_rails['smtp_password'] = ''
         gitlab_rails['smtp_domain'] = 'exmail.qq.com'
         gitlab_rails['smtp_authentication'] = 'login'
         gitlab_rails['smtp_enable_starttls_auto'] = true
