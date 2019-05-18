@@ -1,7 +1,8 @@
-version: '3'
+version: "3"
 
 services:
   gitlab:
+    container_name: gitlab
     image: gitlab/gitlab-ce:11.10.4-ce.0
     restart: always
     ports:
@@ -37,15 +38,17 @@ services:
       - ./gitlab/data:/var/opt/gitlab
 
   gitlab-runner:
+    container_name: gitlab-runner
     image: gitlab/gitlab-runner:v11.10.1
-    restart: always 
-    networks:
-      - gitlab_default
-    volumes: 
+    restart: always
+    depends_on:
+      - gitlab
+    volumes:
       - ./gitlab-runner/config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
 
   jenkins:
+    container_name: jenkins
     image: jenkinsci/blueocean
     restart: always
     user: root
@@ -54,6 +57,7 @@ services:
       - ./jenkins:/var/jenkins_home
 
   verdaccio:
+    container_name: verdaccio
     image: verdaccio/verdaccio:4.x-next
     restart: always
     user: root
@@ -63,6 +67,7 @@ services:
       - ./verdaccio/plugins:/verdaccio/plugins
 
   nginx:
+    container_name: nginx
     image: nginx
     restart: always
     privileged: true
@@ -77,7 +82,8 @@ services:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf.d:/etc/nginx/conf.d
 
-  dns:
+  dnsmasq:
+    container_name: dnsmasq
     image: jpillora/dnsmasq
     restart: always
     ports:
