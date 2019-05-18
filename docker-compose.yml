@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  jenkins:
+    image: jenkinsci/blueocean
+    restart: always
+    volumes:
+      - ./jenkins:/var/jenkins_home
+
+  nginx:
+    image: nginx
+    restart: always
+    privileged: true
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - jenkins
+    volumes:
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/conf.d:/etc/nginx/conf.d
+
+  dns:
+    image: jpillora/dnsmasq
+    restart: always
+    ports:
+      - 53:53/udp
+    volumes:
+      - './dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf'
