@@ -14,7 +14,7 @@ services:
     restart: always
     user: root
     volumes:
-      - ./verdaccio:~/.config/verdaccio
+      - ./verdaccio:$HOME/.config/verdaccio
 
   nginx:
     image: nginx
