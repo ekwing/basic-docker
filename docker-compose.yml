@@ -5,6 +5,7 @@ services:
     container_name: gitlab
     image: gitlab/gitlab-ce:11.10.4-ce.0
     restart: always
+    user: root
     ports:
       - 22:22
     environment:
@@ -41,6 +42,7 @@ services:
     container_name: gitlab-runner
     image: gitlab/gitlab-runner:v11.10.1
     restart: always
+    user: root
     depends_on:
       - gitlab
     volumes:
