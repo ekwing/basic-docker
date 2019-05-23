@@ -3,8 +3,8 @@ version: "3"
 services:
   gitlab:
     container_name: gitlab
+    hostname: gitlab.ekwing.com
     image: gitlab/gitlab-ce:11.10.4-ce.0
-    hostname: 'gitlab.ekwing.com'
     user: root
     privileged: true
     restart: always
@@ -59,6 +59,7 @@ services:
 
   jenkins:
     container_name: jenkins
+    hostname: jenkins.ekwing.com
     image: jenkinsci/blueocean
     restart: always
     user: root
@@ -70,6 +71,7 @@ services:
 
   verdaccio:
     container_name: verdaccio
+    hostname: npm.ekwing.com
     image: verdaccio/verdaccio:4.x-next
     restart: always
     user: root
@@ -96,16 +98,6 @@ services:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf.d:/etc/nginx/conf.d
 
-  dnsmasq:
-    container_name: dnsmasq
-    image: jpillora/dnsmasq
-    restart: always
-    user: root
-    ports:
-      - 53:53/udp
-    volumes:
-      - ./dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf
-
 networks:
-  gitlab
-  default
+  gitlab:
+  default:
