@@ -6,11 +6,10 @@ services:
     image: gitlab/gitlab-ce:11.10.4-ce.0
     hostname: 'gitlab.ekwing.com'
     user: root
+    privileged: true
     restart: always
     ports:
       - "10022:22"
-    cap_add:
-      - SYS_ADMIN
     environment:
       TZ: "Asia/Shanghai"
       GITLAB_OMNIBUS_CONFIG: |
@@ -38,10 +37,12 @@ services:
         gitlab_rails['smtp_tls'] = true
         gitlab_rails['time_zone'] = 'Asia/Shanghai'
     volumes:
-      - '/srv/gitlab/config:/etc/gitlab'
-      - '/srv/gitlab/logs:/var/log/gitlab'
-      - '/srv/gitlab/data:/var/opt/gitlab'
-      - '/etc/localtime:/etc/localtime'
+      - ./gitlab/config:/etc/gitlab
+      - ./gitlab/logs:/var/log/gitlab
+      - ./gitlab/data:/var/opt/gitlab
+    networks:
+      - default
+      - gitlab
 
   gitlab-runner:
     container_name: gitlab-runner
@@ -53,17 +54,19 @@ services:
     volumes:
       - ./gitlab-runner/config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gitlab
 
   jenkins:
     container_name: jenkins
     image: jenkinsci/blueocean
     restart: always
     user: root
-    links:
-      - gitlab:gitlab.ekwing.com
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins:/var/jenkins_home
+    networks:
+      - default
 
   verdaccio:
     container_name: verdaccio
@@ -74,6 +77,8 @@ services:
       - ./verdaccio/conf:/verdaccio/conf
       - ./verdaccio/storage:/verdaccio/storage
       - ./verdaccio/plugins:/verdaccio/plugins
+    networks:
+      - default
 
   nginx:
     container_name: nginx
@@ -95,7 +100,12 @@ services:
     container_name: dnsmasq
     image: jpillora/dnsmasq
     restart: always
+    user: root
     ports:
       - 53:53/udp
     volumes:
       - ./dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf
+
+networks:
+  gitlab
+  default
