@@ -4,7 +4,7 @@ services:
   gitlab:
     container_name: gitlab
     hostname: gitlab.ekwing.com
-    image: gitlab/gitlab-ce:11.10.4-ce.0
+    image: "gitlab/gitlab-ce:${GITLAB_VERSION}-ce.0"
     user: root
     privileged: true
     restart: always
@@ -40,13 +40,10 @@ services:
       - ./gitlab/config:/etc/gitlab
       - ./gitlab/logs:/var/log/gitlab
       - ./gitlab/data:/var/opt/gitlab
-    networks:
-      - default
-      - gitlab
 
   gitlab-runner:
     container_name: gitlab-runner
-    image: gitlab/gitlab-runner:v11.10.1
+    image: "gitlab/gitlab-runner:${GITLAB_RUNNER_VERSION}"
     restart: always
     user: root
     depends_on:
@@ -54,37 +51,31 @@ services:
     volumes:
       - ./gitlab-runner/config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - gitlab
 
   jenkins:
     container_name: jenkins
     hostname: jenkins.ekwing.com
-    image: jenkinsci/blueocean
+    image: "jenkinsci/blueocean:${JENKINS_VERSION}"
     restart: always
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins:/var/jenkins_home
-    networks:
-      - default
 
   verdaccio:
     container_name: verdaccio
     hostname: npm.ekwing.com
-    image: verdaccio/verdaccio:4.x-next
+    image: "verdaccio/verdaccio:${VERDACCIO_VERSION}"
     restart: always
     user: root
     volumes:
       - ./verdaccio/conf:/verdaccio/conf
       - ./verdaccio/storage:/verdaccio/storage
       - ./verdaccio/plugins:/verdaccio/plugins
-    networks:
-      - default
 
   nginx:
     container_name: nginx
-    image: nginx
+    image: "nginx:${NGINX_VERSION}"
     restart: always
     privileged: true
     ports:
@@ -97,7 +88,3 @@ services:
     volumes:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf.d:/etc/nginx/conf.d
-
-networks:
-  gitlab:
-  default:
