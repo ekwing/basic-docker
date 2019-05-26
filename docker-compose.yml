@@ -4,7 +4,7 @@ services:
   gitlab:
     container_name: gitlab
     hostname: gitlab.ekwing.com
-    image: "gitlab/gitlab-ce:${GITLAB_VERSION}-ce.0"
+    image: "ekwing/gitlab:${GITLAB_VERSION}"
     user: root
     privileged: true
     restart: always
@@ -55,7 +55,7 @@ services:
   jenkins:
     container_name: jenkins
     hostname: jenkins.ekwing.com
-    image: "jenkinsci/blueocean:${JENKINS_VERSION}"
+    image: "ekwing/jenkins:${JENKINS_VERSION}"
     restart: always
     user: root
     volumes:

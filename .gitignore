@@ -1,6 +1,10 @@
 nginx/logs/
-jenkins/
-gitlab/
+jenkins/*
+!jenkins/Dockerfile
+!jenkins/README.md
+gitlab/*
+!gitlab/Dockerfile
+!gitlab/README.md
 gitlab-runner/
 verdaccio/conf/htpasswd
 verdaccio/plugins
