@@ -2,5 +2,22 @@
 
 ## Build
 ```bash
-docker build --tag=ekwing/gitlab --build-arg GITLAB_VERSION=10.8.3-ce.0 --compress .
+docker build \
+  --tag=ekwing/gitlab:10.8.3-ce.0 \
+  --build-arg GITLAB_VERSION=10.8.3-ce.0 \
+  --compress \
+  .
+```
+
+## RUN
+```bash
+docker run \
+  --name gitlab
+  -p 10080:80 \
+  -p 10022:22 \
+  -v ./gitlab/config:/etc/gitlab \
+  -v ./gitlab/logs:/var/log/gitlab \
+  -v ./gitlab/data:/var/opt/gitlab \
+  -d \
+  ekwing/gitlab
 ```
