@@ -1,6 +1,6 @@
 ARG JENKINS_VERSION=alpine
 
-FROM "jenkins:${JENKINS_VERSION}"
+FROM "jenkins/jenkins:${JENKINS_VERSION}"
 
 LABEL maintainer="L-Chris@563303226@qq.com"
 
