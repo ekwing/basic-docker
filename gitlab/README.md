@@ -12,12 +12,12 @@ docker build \
 ## RUN
 ```bash
 docker run \
-  --name gitlab
+  --name gitlab \
   -p 10080:80 \
   -p 10022:22 \
-  -v ./gitlab/config:/etc/gitlab \
-  -v ./gitlab/logs:/var/log/gitlab \
-  -v ./gitlab/data:/var/opt/gitlab \
+  -v "./gitlab/config:/etc/gitlab" \
+  -v "./gitlab/logs:/var/log/gitlab" \
+  -v "./gitlab/data:/var/opt/gitlab" \
   -d \
-  ekwing/gitlab
+  ekwing/gitlab:10.8.3-ce.0
 ```

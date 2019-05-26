@@ -12,7 +12,17 @@ USER root
 
 RUN sed -i 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/mirrors\.aliyun\.com\/ubuntu\//g' /etc/apt/sources.list
 
-RUN set -ex
+RUN set -ex \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    binutils-gold \
+    curl \
+    g++ \
+    gcc \
+    gnupg \
+    make \
+    python \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN for key in \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
