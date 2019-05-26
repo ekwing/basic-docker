@@ -3,8 +3,8 @@
 ## Build
 ```bash
 docker build \
-  --tag=ekwing/jenkins \
-  --build-arg JENKINS_VERSION=alpine \
+  --tag=ekwing/jenkins:2.138.2-alpine \
+  --build-arg JENKINS_VERSION=2.138.2-alpine \
   --compress \
   .
 ```
