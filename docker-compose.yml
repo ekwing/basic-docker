@@ -97,3 +97,10 @@ services:
     volumes:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/conf.d:/etc/nginx/conf.d
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: "${DEFAULT_SUBNET}"
