@@ -63,7 +63,8 @@ services:
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./jenkins:/var/jenkins_home
+      - ./jenkins/data:/var/jenkins_home
+      - ./jenkins/scripts:/root/scripts
     extra_hosts:
       - "gitlab.ekwing.com:172.17.0.1"
       - "npm.ekwing.com:172.17.0.1"
