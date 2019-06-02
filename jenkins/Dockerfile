@@ -24,7 +24,8 @@ RUN set -x \
     gnupg \
     linux-headers \
     make \
-    python
+    python \
+  && apk add --no-cache subversion==1.11.1-r0
 
 # Install Node
 RUN for key in \
