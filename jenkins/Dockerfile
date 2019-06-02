@@ -25,7 +25,9 @@ RUN set -x \
     linux-headers \
     make \
     python \
-  && apk add --no-cache subversion==1.11.1-r0
+  && apk add --no-cache \
+    subversion==1.11.1-r0 \
+    subversion-libs==1.11.1-r0
 
 # Install Node
 RUN for key in \
