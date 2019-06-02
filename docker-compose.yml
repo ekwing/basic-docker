@@ -41,8 +41,8 @@ services:
       - ./gitlab/logs:/var/log/gitlab
       - ./gitlab/data:/var/opt/gitlab
     extra_hosts:
-      - "jenkins.ekwing.com:172.17.0.1"
-      - "npm.ekwing.com:172.17.0.1"
+      - "jenkins.ekwing.com:${BRIDGE_IP}"
+      - "npm.ekwing.com:${BRIDGE_IP}"
 
   gitlab-runner:
     container_name: gitlab-runner
@@ -66,8 +66,8 @@ services:
       - ./jenkins/data:/var/jenkins_home
       - ./jenkins/scripts:/root/scripts
     extra_hosts:
-      - "gitlab.ekwing.com:172.17.0.1"
-      - "npm.ekwing.com:172.17.0.1"
+      - "gitlab.ekwing.com:${BRIDGE_IP}"
+      - "npm.ekwing.com:${BRIDGE_IP}"
 
   verdaccio:
     container_name: verdaccio
