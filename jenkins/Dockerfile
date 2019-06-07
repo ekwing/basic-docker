@@ -10,12 +10,22 @@ ENV NODE_VERSION=12.2.0 \
 
 USER root
 
+RUN echo 'Asia/Shanghai' > /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata
+
 RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" > /etc/apt/sources.list && \
     echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" >> /etc/apt/sources.list  && \
     echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list && \
     echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list && \
     echo "deb http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
     echo "deb-src http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list
+
+RUN echo "[global]" > ~/.subversion/servers && \
+    echo "store-passwords = yes" >> ~/.subversion/servers && \
+    echo "store-ssl-client-cert-pp = yes" >> ~/.subversion/servers && \
+    echo "store-plaintext-passwords = yes" >> ~/.subversion/servers && \
+    echo "store-ssl-client-cert-pp-plaintext = yes" >> ~/.subversion/servers && \
+    echo "store-auth-creds = yes" >> ~/.subversion/servers
 
 RUN set -ex \
   && apt-get update \

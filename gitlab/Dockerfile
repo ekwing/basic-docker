@@ -10,6 +10,9 @@ ENV NODE_VERSION=12.2.0 \
 
 USER root
 
+RUN echo 'Asia/Shanghai' > /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata
+
 RUN sed -i 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/mirrors\.aliyun\.com\/ubuntu\//g' /etc/apt/sources.list
 
 RUN set -ex \
@@ -20,9 +23,12 @@ RUN set -ex \
     g++ \
     gcc \
     gnupg \
+    dirmngr \
     make \
     python \
   && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/dirmngr /opt/gitlab/embeded/bin/dirmngr
 
 RUN for key in \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
