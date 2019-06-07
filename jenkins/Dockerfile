@@ -6,30 +6,29 @@ LABEL maintainer="L-Chris@563303226@qq.com"
 
 ENV NODE_VERSION=12.2.0 \
     YARN_VERSION=1.16.0 \
-    NODE_PREFIX=/usr \
-    YARN_PREFIX=/usr/share/yarn \
     BINARY_PREFIX=/usr/bin
 
 USER root
 
-RUN echo "http://mirrors.aliyun.com/alpine/v3.9/main/" > /etc/apk/repositories
+RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" > /etc/apt/sources.list && \
+    echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" >> /etc/apt/sources.list  && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb-src http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list
 
-RUN set -x \
-  && apk add --no-cache libstdc++ \
-  && apk add --no-cache --virtual .build-deps \
+RUN set -ex \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
     binutils-gold \
     curl \
     g++ \
     gcc \
     gnupg \
-    linux-headers \
     make \
     python \
-  && apk add --no-cache \
-    subversion==1.11.1-r0 \
-    subversion-libs==1.11.1-r0
+  && rm -rf /var/lib/apt/lists/*
 
-# Install Node
 RUN for key in \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
     FD3A5288F042B6850C66B31F09FE44734EB7990E \
@@ -47,20 +46,19 @@ RUN for key in \
     gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
     gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
   done \
-    && curl -fsSLO --compressed "https://npm.taobao.org/mirrors/node/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
-    && curl -fsSLO --compressed "https://npm.taobao.org/mirrors/node/v$NODE_VERSION/SHASUMS256.txt.asc" \
-    && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
-    && grep " node-v$NODE_VERSION.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
-    && tar -xf "node-v$NODE_VERSION.tar.xz" \
-    && cd "node-v$NODE_VERSION" \
-    && ./configure \
-    && make -j$(getconf _NPROCESSORS_ONLN) V= \
-    && make install \
-    && cd .. \
-    && rm -Rf "node-v$NODE_VERSION" \
-    && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt
+  && curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
+  && curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
+  && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
+  && grep " node-v$NODE_VERSION.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
+  && tar -xf "node-v$NODE_VERSION.tar.xz" \
+  && cd "node-v$NODE_VERSION" \
+  && ./configure \
+  && make -j$(getconf _NPROCESSORS_ONLN) V= \
+  && make install \
+  && cd .. \
+  && rm -Rf "node-v$NODE_VERSION" \
+  && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt
 
-# Install Yarn
 RUN for key in \
     6A010C5166006599AA17F08146C2130DFD2497F5 \
   ; do \
@@ -81,11 +79,3 @@ RUN npm config set registry http://npm.ekwing.com \
   && npm config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass \
   && yarn config set registry http://npm.ekwing.com \
   && yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass
-
-# clean up
-RUN apk del .build-deps \
-  && rm -rf \
-    /node_src \
-    /tmp/* \
-    /var/cache/apk/* \
-    /usr/share/man
