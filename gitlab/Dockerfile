@@ -4,6 +4,8 @@ FROM "gitlab/gitlab-ce:${GITLAB_VERSION}"
 
 LABEL maintainer="L-Chris@563303226@qq.com"
 
+ARG GITLAB_RUNNER_VERSION=latest
+
 ENV NODE_VERSION=12.2.0 \
     YARN_VERSION=1.16.0 \
     BINARY_PREFIX=/usr/bin
@@ -14,6 +16,9 @@ RUN echo 'Asia/Shanghai' > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
 RUN sed -i 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/mirrors\.aliyun\.com\/ubuntu\//g' /etc/apt/sources.list
+
+RUN curl https://packages.gitlab.com/gpg.key 2> /dev/null | sudo apt-key add - &>/dev/null && \
+    echo "https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu xenial main" > /etc/apt/sources.list.d/gitlab-runner.list
 
 RUN set -ex \
   && apt-get update \
@@ -26,6 +31,7 @@ RUN set -ex \
     dirmngr \
     make \
     python \
+    gitlab-runner=$GITLAB_RUNNER_VERSION \
   && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/dirmngr /opt/gitlab/embeded/bin/dirmngr
@@ -47,8 +53,8 @@ RUN for key in \
     gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
     gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
   done \
-  && curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
-  && curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
+  && curl -fsSLO --compressed "https://npm.taobao.org/mirrors/node/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
+  && curl -fsSLO --compressed "https://npm.taobao.org/mirrors/node/v$NODE_VERSION/SHASUMS256.txt.asc" \
   && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
   && grep " node-v$NODE_VERSION.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
   && tar -xf "node-v$NODE_VERSION.tar.xz" \

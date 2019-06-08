@@ -40,20 +40,10 @@ services:
       - ./gitlab/config:/etc/gitlab
       - ./gitlab/logs:/var/log/gitlab
       - ./gitlab/data:/var/opt/gitlab
+      - ./gitlab-runner/config:/etc/gitlab-runner
     extra_hosts:
       - "jenkins.ekwing.com:${BRIDGE_IP}"
       - "npm.ekwing.com:${BRIDGE_IP}"
-
-  gitlab-runner:
-    container_name: gitlab-runner
-    image: "gitlab/gitlab-runner:${GITLAB_RUNNER_VERSION}"
-    restart: always
-    user: root
-    depends_on:
-      - gitlab
-    volumes:
-      - ./gitlab-runner/config:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
 
   jenkins:
     container_name: jenkins

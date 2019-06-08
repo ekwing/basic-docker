@@ -20,13 +20,6 @@ RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib no
     echo "deb http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
     echo "deb-src http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list
 
-RUN echo "[global]" > ~/.subversion/servers && \
-    echo "store-passwords = yes" >> ~/.subversion/servers && \
-    echo "store-ssl-client-cert-pp = yes" >> ~/.subversion/servers && \
-    echo "store-plaintext-passwords = yes" >> ~/.subversion/servers && \
-    echo "store-ssl-client-cert-pp-plaintext = yes" >> ~/.subversion/servers && \
-    echo "store-auth-creds = yes" >> ~/.subversion/servers
-
 RUN set -ex \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -56,8 +49,8 @@ RUN for key in \
     gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
     gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
   done \
-  && curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
-  && curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
+  && curl -fsSLO --compressed "https://npm.taobao.org/mirrors/node/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
+  && curl -fsSLO --compressed "https://npm.taobao.org/mirrors/node/v$NODE_VERSION/SHASUMS256.txt.asc" \
   && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
   && grep " node-v$NODE_VERSION.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
   && tar -xf "node-v$NODE_VERSION.tar.xz" \
@@ -89,3 +82,10 @@ RUN npm config set registry http://npm.ekwing.com \
   && npm config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass \
   && yarn config set registry http://npm.ekwing.com \
   && yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass
+
+RUN echo "[global]" > ~/.subversion/servers && \
+    echo "store-passwords = yes" >> ~/.subversion/servers && \
+    echo "store-ssl-client-cert-pp = yes" >> ~/.subversion/servers && \
+    echo "store-plaintext-passwords = yes" >> ~/.subversion/servers && \
+    echo "store-ssl-client-cert-pp-plaintext = yes" >> ~/.subversion/servers && \
+    echo "store-auth-creds = yes" >> ~/.subversion/servers
