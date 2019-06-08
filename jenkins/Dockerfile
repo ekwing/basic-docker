@@ -83,7 +83,8 @@ RUN npm config set registry http://npm.ekwing.com \
   && yarn config set registry http://npm.ekwing.com \
   && yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass
 
-RUN echo "[global]" > ~/.subversion/servers && \
+RUN mkdir ~/.subversion && \
+    echo "[global]" > ~/.subversion/servers && \
     echo "store-passwords = yes" >> ~/.subversion/servers && \
     echo "store-ssl-client-cert-pp = yes" >> ~/.subversion/servers && \
     echo "store-plaintext-passwords = yes" >> ~/.subversion/servers && \
