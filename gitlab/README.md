@@ -4,7 +4,8 @@
 ```bash
 docker build \
   --tag=ekwing/gitlab:10.8.3-ce.0 \
-  --build-arg GITLAB_VERSION=10.8.3-ce.0 GITLAB_RUNNER_VERSION=10.8.2 \
+  --build-arg GITLAB_VERSION=10.8.3-ce.0 \
+  --build-arg GITLAB_RUNNER_VERSION=10.8.2 \
   --compress \
   .
 ```
