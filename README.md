@@ -8,10 +8,10 @@ basic development for ekwing-dev
 - Verdaccio
 - Nginx
 
-## Steps
+## Usage
 
 - open ports on host
-```
+```bash
 firewall-cmd --permanent --zone=public --add-port=80/udp
 firewall-cmd --permanent --zone=public --add-port=80/tcp
 
@@ -21,13 +21,22 @@ firewall-cmd --permanent --zone=public --add-port=10022/tcp
 firewall-cmd --reload
 ```
 
-- add extra_hosts
-```
-# jenkins
-"gitlab.ekwing.com:172.17.0.1"
-"npm.ekwing.com:172.17.0.1"
+- change BRIDGE_IP and DEFAULT_SUBNET
+```bash
+# /etc/docker/daemon.json
+vi /etc/docker/daemon.json
 
-# gitlab
-"jenkins.ekwing.com:172.17.0.1"
-"npm.ekwing.com:172.17.0.1"
+{
+  "registry-mirrors": [""],
+  "bip": "172.20.0.1/16"
+}
+
+# .env
+BRIDGE_IP=172.20.0.1/16
+DEFAULT_SUBNET=172.21.0.1/16
+```
+
+- run docker-compose
+```
+docker-compose up -d
 ```
