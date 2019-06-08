@@ -17,8 +17,9 @@ RUN echo 'Asia/Shanghai' > /etc/timezone && \
 
 RUN sed -i 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/mirrors\.aliyun\.com\/ubuntu\//g' /etc/apt/sources.list
 
-RUN curl https://packages.gitlab.com/gpg.key 2> /dev/null | sudo apt-key add - &>/dev/null && \
-    echo "https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu xenial main" > /etc/apt/sources.list.d/gitlab-runner.list
+RUN curl https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | bash && \
+  echo "deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu xenial main" > /etc/apt/sources.list.d/gitlab-runner.list && \
+  echo "deb-src https://mirrors.tuna.tsinghua.edu.cn/gitlab-runner/ubuntu xenial main" > /etc/apt/sources.list.d/gitlab-runner.list
 
 RUN set -ex \
   && apt-get update \
@@ -34,7 +35,7 @@ RUN set -ex \
     gitlab-runner=$GITLAB_RUNNER_VERSION \
   && rm -rf /var/lib/apt/lists/*
 
-RUN ln -s /usr/bin/dirmngr /opt/gitlab/embeded/bin/dirmngr
+RUN ln -s /usr/bin/dirmngr /opt/gitlab/embedded/bin/dirmngr
 
 RUN for key in \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
