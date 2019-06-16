@@ -84,6 +84,15 @@ RUN for key in \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
 RUN npm config set registry http://npm.ekwing.com \
-  && npm config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass \
-  && yarn config set registry http://npm.ekwing.com \
-  && yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass
+  && npm config set sass_binary_site https://npm.taobao.org/mirrors/node-sass \
+  && npm config set phantomjs_cdnurl https://npm.taobao.org/mirrors/phantomjs \
+  && npm config set electron_mirror https://npm.taobao.org/mirrors/electron \
+  && npm config set chromedriver_cdnurl https://npm.taobao.org/mirrors/chromedriver \
+  && npm config set puppeteer_download_host https://storage.googleapis.com.cnpmjs.org
+
+RUN yarn config set registry http://npm.ekwing.com \
+  && yarn config set sass_binary_site https://npm.taobao.org/mirrors/node-sass \
+  && yarn config set phantomjs_cdnurl https://npm.taobao.org/mirrors/phantomjs \
+  && yarn config set electron_mirror https://npm.taobao.org/mirrors/electron \
+  && yarn config set chromedriver_cdnurl https://npm.taobao.org/mirrors/chromedriver \
+  && yarn config set puppeteer_download_host https://storage.googleapis.com.cnpmjs.org
