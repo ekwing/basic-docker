@@ -10,7 +10,8 @@ ENV NODE_VERSION=12.2.0 \
 
 USER root
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone
 
 RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" > /etc/apt/sources.list && \
     echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" >> /etc/apt/sources.list  && \
