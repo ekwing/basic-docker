@@ -1,4 +1,4 @@
-ARG JENKINS_VERSION=alpine
+ARG JENKINS_VERSION=latest
 
 FROM "jenkins/jenkins:${JENKINS_VERSION}"
 

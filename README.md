@@ -6,7 +6,7 @@ basic development for ekwing-dev
 - Gitlab
 - Jenkins
 - Verdaccio
-- Nginx
+- Nginx-Proxy
 
 ## Usage
 
@@ -36,7 +36,7 @@ BRIDGE_IP=172.20.0.1/16
 DEFAULT_SUBNET=172.21.0.1/16
 ```
 
-- run docker-compose
+- run
 ```
 docker-compose up -d
 ```
