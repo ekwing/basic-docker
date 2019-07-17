@@ -96,3 +96,4 @@ RUN yarn config set registry http://npm.ekwing.com \
   && yarn config set electron_mirror https://npm.taobao.org/mirrors/electron \
   && yarn config set chromedriver_cdnurl https://npm.taobao.org/mirrors/chromedriver \
   && yarn config set puppeteer_download_host https://storage.googleapis.com.cnpmjs.org
+  

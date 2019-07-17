@@ -20,9 +20,9 @@ services:
         gitlab_pages['enable'] = true
         gitlab_rails['backup_keep_time'] = 604800
         gitlab_rails['gitlab_email_enabled'] = true
-        gitlab_rails['gitlab_email_from'] = 'ekwing@moyi365.com'
+        gitlab_rails['gitlab_email_from'] = "${EMAIL}"
         gitlab_rails['gitlab_email_display_name'] = 'Gitlab Admin'
-        gitlab_rails['gitlab_email_reply_to'] = 'ekwing@moyi365.com'
+        gitlab_rails['gitlab_email_reply_to'] = "${EMAIL}"
         gitlab_rails['gitlab_ssh_host'] = 'gitlab.ekwing.com'
         gitlab_rails['gitlab_shell_ssh_port'] = 10022
         gitlab_rails['lfs_enabled'] = true
@@ -30,8 +30,8 @@ services:
         gitlab_rails['smtp_enable'] = true
         gitlab_rails['smtp_address'] = 'smtp.exmail.qq.com'
         gitlab_rails['smtp_port'] = 465
-        gitlab_rails['smtp_user_name'] = 'ekwing@moyi365.com'
-        gitlab_rails['smtp_password'] = ''
+        gitlab_rails['smtp_user_name'] = "${EMAIL}"
+        gitlab_rails['smtp_password'] = "${EMAIL_PASSWORD}"
         gitlab_rails['smtp_domain'] = 'exmail.qq.com'
         gitlab_rails['smtp_authentication'] = 'login'
         gitlab_rails['smtp_enable_starttls_auto'] = true
@@ -86,12 +86,14 @@ services:
     container_name: nginx-proxy
     image: "jwilder/nginx-proxy:${NGINX_VERSION}"
     restart: always
+    user: root
     privileged: true
     ports:
       - 80:80
       - 443:443
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx-proxy/conf.d/proxy.conf:/etc/nginx/conf.d/proxy.conf
 
 networks:
   default:
