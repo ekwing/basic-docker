@@ -10,15 +10,15 @@ ENV NODE_VERSION=12.2.0 \
 
 USER root
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo "Asia/Shanghai" > /etc/timezone
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+  && echo "Asia/Shanghai" > /etc/timezone
 
-RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" > /etc/apt/sources.list && \
-    echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" >> /etc/apt/sources.list  && \
-    echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list && \
-    echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list && \
-    echo "deb http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list && \
-    echo "deb-src http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" > /etc/apt/sources.list \
+  && echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch main contrib non-free" >> /etc/apt/sources.list  \
+  && echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list \
+  && echo "deb-src http://mirrors.tuna.tsinghua.edu.cn/debian stretch-updates main contrib non-free" >> /etc/apt/sources.list \
+  && echo "deb http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list \
+  && echo "deb-src http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list
 
 RUN set -ex \
   && apt-get update \
@@ -30,6 +30,9 @@ RUN set -ex \
     gnupg \
     make \
     python \
+    apt-transport-https \
+    ca-certificates \
+    software-properties-common \
   && rm -rf /var/lib/apt/lists/*
 
 RUN for key in \
@@ -92,10 +95,17 @@ RUN yarn config set registry http://npm.ekwing.com \
   && yarn config set chromedriver_cdnurl https://npm.taobao.org/mirrors/chromedriver \
   && yarn config set puppeteer_download_host https://storage.googleapis.com.cnpmjs.org
 
-RUN mkdir ~/.subversion && \
-    echo "[global]" > ~/.subversion/servers && \
-    echo "store-passwords = yes" >> ~/.subversion/servers && \
-    echo "store-ssl-client-cert-pp = yes" >> ~/.subversion/servers && \
-    echo "store-plaintext-passwords = yes" >> ~/.subversion/servers && \
-    echo "store-ssl-client-cert-pp-plaintext = yes" >> ~/.subversion/servers && \
-    echo "store-auth-creds = yes" >> ~/.subversion/servers
+RUN curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/debian/gpg | apt-key add - \
+  && add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/debian $(lsb_release -cs) stable" \
+  && apt-get update -y \
+  && apt-get install -y --no-install-recommends docker-ce \
+  && curl -L https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose \
+  && chmod +x /usr/local/bin/docker-compose
+
+RUN mkdir ~/.subversion \
+  && echo "[global]" > ~/.subversion/servers \
+  && echo "store-passwords = yes" >> ~/.subversion/servers \
+  && echo "store-ssl-client-cert-pp = yes" >> ~/.subversion/servers \
+  && echo "store-plaintext-passwords = yes" >> ~/.subversion/servers \
+  && echo "store-ssl-client-cert-pp-plaintext = yes" >> ~/.subversion/servers \
+  && echo "store-auth-creds = yes" >> ~/.subversion/servers
